@@ -1,0 +1,6 @@
+# .rubocop.yml
+
+# Set the Ruby version to 3
+# Adjust this based on your specific Ruby version
+AllCops:
+  TargetRubyVersion: 3.0

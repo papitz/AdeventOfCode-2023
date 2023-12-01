@@ -13,16 +13,12 @@ WRITTEN_NUMBERS = {
 }.freeze
 DIGIT_EXPRESSION = "(?=(#{WRITTEN_NUMBERS.keys.join('|')}|\\d))".freeze
 
-sum = 0
-File.readlines('input.txt', chomp: true).each do |line|
+sum = File.readlines('input.txt', chomp: true).map do |line|
   matches = line.scan(Regexp.new(DIGIT_EXPRESSION)).flatten
+  [
+    WRITTEN_NUMBERS[matches.first] || matches.first,
+    WRITTEN_NUMBERS[matches.last] || matches.last
+  ].join.to_i
+end.sum
 
-  first = matches.first
-  last = matches.last
-  first = first.size > 1 ? WRITTEN_NUMBERS[first] : first
-  last = last.size > 1 ? WRITTEN_NUMBERS[last] : last
-  number = first + last
-  sum += number.to_i
-end
-
-puts "sum #{sum}"
+puts "Sum: #{sum}"

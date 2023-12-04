@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Day3 of advent of code. Today we evaluate Scratchcards
 class Scratchcards
   LIST_EXPRESSION = /Card\s*\d+: (.+) \| (.+)/
   class << self
@@ -11,6 +12,14 @@ class Scratchcards
     def get_numbers(line)
       m = line.match LIST_EXPRESSION
       [m[1].split(' ').map(&:to_i), m[2].split(' ').map(&:to_i)]
+    end
+
+    def add_copies(cards, num_of_wins, index, original_num_of_cards)
+      (1..num_of_wins).each do |offset|
+        break if index + 1 + offset > original_num_of_cards
+
+        cards[index + 1 + offset] += cards[index + 1]
+      end
     end
   end
 
@@ -26,18 +35,13 @@ class Scratchcards
   def self.part_two(lines)
     original_num_of_cards = lines.size
     cards = (1..original_num_of_cards).each_with_object({}) { |key, hash| hash[key] = 1 }
-    lines.each_with_index do |line, index|
-      lists = get_numbers(line)
-      winning_numbers = lists[0]
-      our_numbers = lists[1]
-      num_of_wins = winning_numbers.intersection(our_numbers).size * (cards[index + 1])
-      (1...num_of_wins).each do |offset|
-        return if index + 1 + offset > original_num_of_cards
-        cards[index + 1 + offset] += 1
-      end
-    end
 
-    p cards #.values.sum
+    lines.each_with_index do |line, index|
+      winning_numbers, our_numbers = get_numbers(line)
+      num_of_wins = winning_numbers.intersection(our_numbers).size
+      add_copies(cards, num_of_wins, index, original_num_of_cards)
+    end
+    cards.values.sum
   end
 end
 

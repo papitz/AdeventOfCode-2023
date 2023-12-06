@@ -9,7 +9,6 @@ class BoatRace
 
     def get_race_tuples_p2(lines)
       times = lines[0].match(/Time:\s*(.*)/)[1].split(/\s+/).join.to_i
-      p times
       distances = lines[1].match(/Distance:\s*(.*)/)[1].split(/\s+/).join.to_i
       [[times, distances]]
     end
